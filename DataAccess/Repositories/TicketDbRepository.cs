@@ -1,4 +1,5 @@
 ﻿using DataAccess.DataContexts;
+using Domain.Interfaces;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
-    public class TicketDbRepository
+    public class TicketDbRepository: ITicketRepository
     {
         private AirlineDbContext _airlineDbContext;
 
@@ -21,6 +22,18 @@ namespace DataAccess.Repositories
 
         public void Book(Ticket ticket)
         {
+            bool isSeatBooked = _airlineDbContext.Tickets.Any(t =>
+                t.Row == ticket.Row &&
+                t.Column == ticket.Column &&
+                t.FlightIdFK == ticket.FlightIdFK &&
+                !t.Cancelled);
+
+            if (isSeatBooked)
+            {
+                throw new InvalidOperationException("The seat is already booked.");
+            }
+
+            // Proceed with booking if the seat is available
             _airlineDbContext.Tickets.Add(ticket);
             _airlineDbContext.SaveChanges();
         }
@@ -29,7 +42,7 @@ namespace DataAccess.Repositories
         {
             var ticket = _airlineDbContext.Tickets.Find(Id);
 
-            if (ticket != null)
+            if (ticket != null && !ticket.Cancelled)
             {
                 ticket.Cancelled = true;
                 _airlineDbContext.SaveChanges();

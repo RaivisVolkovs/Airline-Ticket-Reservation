@@ -1,4 +1,6 @@
 using Airline_Ticket_Reservation.Data;
+using DataAccess.DataContexts;
+using DataAccess.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,13 +14,18 @@ namespace Airline_Ticket_Reservation
 
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            builder.Services.AddDbContext<AirlineDbContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<AirlineDbContext>();
             builder.Services.AddControllersWithViews();
+
+
+            string absolutePath = builder.Environment.ContentRootPath + "Data\\ticket.json";
+            builder.Services.AddScoped<TicketFileRepository>(x => new TicketFileRepository(absolutePath));
+            builder.Services.AddScoped(typeof(FlightDbRepository));
 
             var app = builder.Build();
 
