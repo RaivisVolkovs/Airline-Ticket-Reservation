@@ -97,8 +97,14 @@ namespace DataAccess.Repositories
             }
         }
 
+        public IQueryable<Ticket> GetActiveTickets(Guid Id)
+        {
+            throw new NotImplementedException();
+        }
 
-
-
+        public int GetActiveTicketsCount(Guid Id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

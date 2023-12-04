@@ -19,8 +19,10 @@ namespace Domain.Models
         public int Column { get; set; }
 
 
-        [ForeignKey("Flights")]
-        public int FlightIdFK { get; set; }
+        [ForeignKey("Flight")]
+        public Guid FlightIdFK { get; set; }
+
+        public virtual Flight Flight { get; set; }
 
         public string Passport { get; set; }
 

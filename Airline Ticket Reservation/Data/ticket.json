@@ -1,0 +1,11 @@
+[
+{
+  "Id": "c9cdd12b-5940-4c3f-92ec-50e302d64857",
+  "DepartureDate": "2023-12-10T08:00:00",
+  "ArrivalDate": "2023-12-10T12:00:00",
+  "CountryFrom": "USA",
+  "CountryTo": "UK",
+  "WholesalePrice": 150
+}
+]
+

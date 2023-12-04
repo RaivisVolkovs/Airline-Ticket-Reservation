@@ -18,6 +18,8 @@ namespace Domain.Interfaces
 
         public Ticket? GetTicket(Guid Id);
 
+        public int GetActiveTicketsCount(Guid Id);
+
 
     }
 }

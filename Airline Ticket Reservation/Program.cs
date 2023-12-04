@@ -1,6 +1,9 @@
-using Airline_Ticket_Reservation.Data;
+using Airline_Ticket_Reservation.Controllers;
+using Airline_Ticket_Reservation.Interfaces;
+using Airline_Ticket_Reservation.Services;
 using DataAccess.DataContexts;
 using DataAccess.Repositories;
+using Domain.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,7 +27,9 @@ namespace Airline_Ticket_Reservation
 
 
             string absolutePath = builder.Environment.ContentRootPath + "Data\\ticket.json";
-            builder.Services.AddScoped<TicketFileRepository>(x => new TicketFileRepository(absolutePath));
+            // builder.Services.AddScoped<ITicketRepository,TicketDbRepository>(x => new TicketFileRepository(absolutePath));
+            builder.Services.AddScoped<ITicketRepository, TicketDbRepository>();
+            builder.Services.AddScoped<IFlightsService, FlightService>();
             builder.Services.AddScoped(typeof(FlightDbRepository));
 
             var app = builder.Build();

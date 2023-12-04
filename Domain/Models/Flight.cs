@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace Domain.Models
 {
     public class Flight
     {
-        [Key]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
         public int Rows { get; set; }
@@ -20,13 +21,13 @@ namespace Domain.Models
 
         public DateTime ArrivalDate { get; set; }
 
-        public string CountryFrom { get; set; }
+        public string? CountryFrom { get; set; }
 
-        public string CountryTo { get; set; }
+        public string? CountryTo { get; set; }
 
-        public int WholesalePrice { get; set; }
+        public double WholesalePrice { get; set; }
 
-        public int CommissionRate { get; set; }
+        public double CommissionRate { get; set; }
 
 
     }

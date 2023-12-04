@@ -42,7 +42,7 @@ namespace DataAccess.Repositories
         {
             var ticket = _airlineDbContext.Tickets.Find(Id);
 
-            if (ticket != null && !ticket.Cancelled)
+            if (ticket != null)
             {
                 ticket.Cancelled = true;
                 _airlineDbContext.SaveChanges();
@@ -59,6 +59,12 @@ namespace DataAccess.Repositories
         {
             return GetTickets().SingleOrDefault(x=> x.Id == Id);
         }
+
+        public int GetActiveTicketsCount(Guid Id)
+        {
+            return _airlineDbContext.Tickets.Count(x => x.FlightIdFK == Id && x.Cancelled == false);
+        }
+
 
 
     }
