@@ -4,6 +4,7 @@ using Airline_Ticket_Reservation.Services;
 using DataAccess.DataContexts;
 using DataAccess.Repositories;
 using Domain.Interfaces;
+using Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,6 +31,7 @@ namespace Airline_Ticket_Reservation
             // builder.Services.AddScoped<ITicketRepository,TicketDbRepository>(x => new TicketFileRepository(absolutePath));
             builder.Services.AddScoped<ITicketRepository, TicketDbRepository>();
             builder.Services.AddScoped<IFlightsService, FlightService>();
+            builder.Services.AddScoped<ITicketService, TicketService>();
             builder.Services.AddScoped(typeof(FlightDbRepository));
 
             var app = builder.Build();

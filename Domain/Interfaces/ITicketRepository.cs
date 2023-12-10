@@ -9,10 +9,10 @@ namespace Domain.Interfaces
 {
     public interface ITicketRepository
     {
+
         public void Book(Ticket ticket);
 
         public void Cancel(Guid Id);
-
 
         public IQueryable<Ticket> GetTickets();
 
@@ -21,6 +21,7 @@ namespace Domain.Interfaces
         public int GetActiveTicketsCount(Guid Id);
 
 
+
+
     }
 }
-

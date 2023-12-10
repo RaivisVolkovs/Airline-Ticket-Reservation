@@ -11,6 +11,5 @@ namespace Airline_Ticket_Reservation.Interfaces
     public interface IFlightsService
     {
         public IEnumerable<ListFlightViewModel> GetCurrentAvailableFlights();
-
     }
 }

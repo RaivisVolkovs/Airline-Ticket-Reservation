@@ -1,5 +1,6 @@
 ﻿using Airline_Ticket_Reservation.Interfaces;
 using Airline_Ticket_Reservation.Models.ViewModels;
+using Airline_Ticket_Reservation.Services;
 using DataAccess.Repositories;
 using Domain.Interfaces;
 using Domain.Models;
@@ -9,13 +10,13 @@ namespace Airline_Ticket_Reservation.Controllers
 {
     public class TicketController : Controller
     {
-        private ITicketRepository _ticketRepository;
+        private ITicketService _ticketService;
         private IFlightsService _flightsService;
 
 
-        public TicketController(ITicketRepository ticketRepository, IFlightsService flightRepository)
+        public TicketController(ITicketService ticketRepository, IFlightsService flightRepository)
         {
-            _ticketRepository = ticketRepository;
+            _ticketService = ticketRepository;
             _flightsService = flightRepository;
         }
 
@@ -32,5 +33,30 @@ namespace Airline_Ticket_Reservation.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
+
+        [HttpGet]
+        [Route("Ticket/BookTicket/{FlightIdFk}")]
+        public IActionResult BookTicket(Guid FlightIdFk)
+        {
+            return View(_ticketService.BookingDetails(FlightIdFk));
+        }
+
+        [HttpPost]
+        public IActionResult BookTicket(BookTicketViewModel bookTicketViewModel)
+        {
+            try
+            {
+                _ticketService.BookTicket(bookTicketViewModel);
+                return RedirectToAction("Index", "Ticket");
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = ex.Message;
+                return RedirectToAction("Index", "Ticket");
+            }
+        }
+
+
     }
 }
+

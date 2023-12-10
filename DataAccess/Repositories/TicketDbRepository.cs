@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
-    public class TicketDbRepository: ITicketRepository
+    public class TicketDbRepository : ITicketRepository
     {
         private AirlineDbContext _airlineDbContext;
 
@@ -64,6 +64,14 @@ namespace DataAccess.Repositories
         {
             return _airlineDbContext.Tickets.Count(x => x.FlightIdFK == Id && x.Cancelled == false);
         }
+
+        public void AddTicket(Ticket ticket)
+        {
+            _airlineDbContext.Tickets.Add(ticket);
+            _airlineDbContext.SaveChanges();
+        }
+
+
 
 
 

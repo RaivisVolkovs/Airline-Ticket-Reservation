@@ -3,6 +3,8 @@ using Airline_Ticket_Reservation.Models.ViewModels;
 using DataAccess.Repositories;
 using Domain.Interfaces;
 using Domain.Models;
+using Microsoft.AspNetCore.Mvc;
+
 
 namespace Airline_Ticket_Reservation.Services
 {
@@ -12,7 +14,7 @@ namespace Airline_Ticket_Reservation.Services
         private ITicketRepository _ticketRepository;
 
 
-        public FlightService( FlightDbRepository flightRepository, ITicketRepository ticketRepository)
+        public FlightService(FlightDbRepository flightRepository, ITicketRepository ticketRepository)
         {
             _flightRepository = flightRepository;
             _ticketRepository = ticketRepository;
@@ -35,6 +37,10 @@ namespace Airline_Ticket_Reservation.Services
 
                          };
             return output;
+
         }
+
+        
+
     }
 }

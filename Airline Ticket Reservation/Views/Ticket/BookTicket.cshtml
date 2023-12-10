@@ -1,0 +1,69 @@
+﻿@model Airline_Ticket_Reservation.Models.ViewModels.BookTicketViewModel
+
+@{
+    ViewData["Title"] = "BookTicket";
+}
+
+<h1>BookTicket</h1>
+
+<h4>BookTicketViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="BookTicket">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <table>
+                @for (int row = 1; row <= Model.Rows; row++)
+                {
+                    <tr>
+                        @for (int col = 1; col <= Model.Columns; col++)
+                        {
+                            var isSeatOccupied = Model.OccupiedSeats.Any(seat => seat.Item1 == col && seat.Item2 == row);
+
+                            <td>
+                                @if (isSeatOccupied)
+                                {
+                                    <span style="color: red;">X</span>
+                                }
+                                else
+                                {
+                                    <span style="color: green;">O</span>
+                                }
+                            </td>
+                        }
+                    </tr>
+                }
+            </table>
+
+
+            <div class="form-group">
+                <label asp-for="FlightIdFK" class="control-label"></label>
+                <input asp-for="FlightIdFK" class="form-control" />
+                <span asp-validation-for="FlightIdFK" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Passport" class="control-label"></label>
+                <input asp-for="Passport" class="form-control" />
+                <span asp-validation-for="Passport" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PricePaid" class="control-label"></label>
+                <input asp-for="PricePaid" class="form-control" />
+                <span asp-validation-for="PricePaid" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="BookTicket" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
