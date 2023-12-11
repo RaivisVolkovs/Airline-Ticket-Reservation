@@ -34,7 +34,16 @@
                     </tr>
                 }
             </table>
-
+            <div class="form-group">
+                <label asp-for="Row" class="control-label"></label>
+                <input asp-for="Row" class="form-control" />
+                <span asp-validation-for="Row" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Column" class="control-label"></label>
+                <input asp-for="Column" class="form-control" />
+                <span asp-validation-for="Column" class="text-danger"></span>
+            </div>
 
             <div class="form-group">
                 <label asp-for="FlightIdFK" class="control-label"></label>

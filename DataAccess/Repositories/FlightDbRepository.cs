@@ -1,4 +1,5 @@
 ﻿using DataAccess.DataContexts;
+using Domain.Interfaces;
 using Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
-    public class FlightDbRepository
+    public class FlightDbRepository : IFlightRepository
     {
 
         private AirlineDbContext _airlineDbContext;
@@ -28,5 +29,6 @@ namespace DataAccess.Repositories
         {
             return _airlineDbContext.Flights.Where(flight => flight.Id == Id);
         }
+
     }
 }

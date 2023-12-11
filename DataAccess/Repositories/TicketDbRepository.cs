@@ -14,10 +14,11 @@ namespace DataAccess.Repositories
     {
         private AirlineDbContext _airlineDbContext;
 
-        public TicketDbRepository(AirlineDbContext airlineDbContext) {
-        
+        public TicketDbRepository(AirlineDbContext airlineDbContext)
+        {
+
             _airlineDbContext = airlineDbContext;
-        
+
         }
 
         public void Book(Ticket ticket)
@@ -50,14 +51,14 @@ namespace DataAccess.Repositories
         }
 
 
-        public IQueryable <Ticket> GetTickets()
+        public IEnumerable<Ticket> GetTickets(Guid Id)
         {
-            return _airlineDbContext.Tickets;
+            return _airlineDbContext.Tickets.Where(x => x.FlightIdFK == Id);
         }
 
-        public Ticket? GetTicket(Guid Id)
+        public IEnumerable<Ticket> GetTicket(Guid Id)
         {
-            return GetTickets().SingleOrDefault(x=> x.Id == Id);
+            return GetTickets(Id);
         }
 
         public int GetActiveTicketsCount(Guid Id)
@@ -65,15 +66,11 @@ namespace DataAccess.Repositories
             return _airlineDbContext.Tickets.Count(x => x.FlightIdFK == Id && x.Cancelled == false);
         }
 
-        public void AddTicket(Ticket ticket)
+        public bool IsSeatBooked(Guid flightId, int row, int column)
         {
-            _airlineDbContext.Tickets.Add(ticket);
-            _airlineDbContext.SaveChanges();
+            var ticketsForSeat = _airlineDbContext.Tickets.Where(ticket => ticket.FlightIdFK == flightId && ticket.Row == row && ticket.Column == column && !ticket.Cancelled).ToList();
+
+            return ticketsForSeat.Any();
         }
-
-
-
-
-
     }
 }

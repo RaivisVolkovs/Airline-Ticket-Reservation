@@ -14,11 +14,13 @@ namespace Domain.Interfaces
 
         public void Cancel(Guid Id);
 
-        public IQueryable<Ticket> GetTickets();
+        public IEnumerable<Ticket> GetTickets(Guid Id);
 
-        public Ticket? GetTicket(Guid Id);
+        public IEnumerable<Ticket> GetTicket(Guid Id);
 
         public int GetActiveTicketsCount(Guid Id);
+
+        public bool IsSeatBooked(Guid flightId, int row, int column);
 
 
 
