@@ -45,10 +45,23 @@ namespace Airline_Ticket_Reservation.Controllers
             }
         }
 
+
+
+        [Route("Admin/ViewTicket/{ticketId}")]
         public IActionResult ViewTicket(Guid ticketId)
         {
+            try
+            {
 
-            return View();
+                var viewTicket = _adminService.ViewTicket(ticketId);
+                return View(viewTicket);
+            }
+
+            catch (Exception ex)
+            {
+                TempData["error"] = ex.Message;
+                return RedirectToAction("Index", "Home");
+            }
 
         }
     }

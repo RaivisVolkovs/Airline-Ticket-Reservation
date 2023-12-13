@@ -44,9 +44,35 @@ namespace Airline_Ticket_Reservation.Services
             }
             catch (Exception ex)
             {
-           
+
                 throw new Exception($"Error in ListTickets service: {ex.Message}", ex);
             }
         }
+
+        public ListTicketViewModel ViewTicket(Guid flightId)
+        {
+
+            var ticketDetails = _ticketRepository.GetTicket(flightId);
+
+            if (ticketDetails == null)
+            {
+                return null;
+            }
+
+            var output = new ListTicketViewModel()
+            {
+                Id = ticketDetails.Id,
+                Row = ticketDetails.Row,
+                Column = ticketDetails.Column,
+                FlightIdFK = ticketDetails.FlightIdFK,
+                Passport = ticketDetails.Passport,
+                PricePaid = ticketDetails.PricePaid,
+                Cancelled = ticketDetails.Cancelled,
+            };
+
+            return output;
+
+        }
+
     }
 }

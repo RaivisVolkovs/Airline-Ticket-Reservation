@@ -6,7 +6,7 @@ namespace Airline_Ticket_Reservation.Interfaces
 {
     public interface ITicketService
     {
-        public void BookTicket(BookTicketViewModel p);
+        public void BookTicket(BookTicketViewModel bookingDetails, IWebHostEnvironment hostEnvironment);
         public BookTicketViewModel BookingDetails(Guid FlightIdFk);
 
     }

@@ -7,5 +7,7 @@ namespace Airline_Ticket_Reservation.Interfaces
     {
 
         public IEnumerable<ListTicketViewModel> ListTickets(Guid flightId);
+
+        public ListTicketViewModel ViewTicket(Guid flightId);
     }
 }

@@ -42,11 +42,12 @@ namespace Airline_Ticket_Reservation.Controllers
         }
 
         [HttpPost]
-        public IActionResult BookTicket(BookTicketViewModel bookTicketViewModel)
+        [HttpGet]
+        public IActionResult BookTicket(BookTicketViewModel bookTicketViewModel, [FromServices] IWebHostEnvironment host)
         {
             try
             {
-                _ticketService.BookTicket(bookTicketViewModel);
+                _ticketService.BookTicket(bookTicketViewModel, host);
                 return RedirectToAction("Index", "Ticket");
             }
             catch (Exception ex)
