@@ -24,49 +24,60 @@ namespace Airline_Ticket_Reservation.Services
 
         public void BookTicket(BookTicketViewModel bookingDetails)
         {
-            var isSeatBooked = _ticketRepository.IsSeatBooked(bookingDetails.FlightIdFK, bookingDetails.Row, bookingDetails.Column);
-            if (isSeatBooked)
-            {
-                throw new InvalidOperationException("The seat is already booked or was canceled.");
-            }
 
-            var flightDetails = _flightRepository.GetFlight(bookingDetails.FlightIdFK).SingleOrDefault();
+            var flightDetails = _flightRepository.GetFlight(bookingDetails.FlightIdFK);
             if (flightDetails == null || flightDetails.DepartureDate <= DateTime.Now)
             {
                 throw new InvalidOperationException("Invalid flight or the departure date is not in the future.");
             }
 
-            _ticketRepository.Book(new Ticket()
+            foreach (string seat in bookingDetails.SelectedSeats)
             {
-                Row = bookingDetails.Row,
-                Column = bookingDetails.Column,
-                FlightIdFK = bookingDetails.FlightIdFK,
-                Passport = bookingDetails.Passport,
-                PricePaid = bookingDetails.PricePaid,
-            });
+                int[] seatInfo = seat.Split(';').Select(n => Convert.ToInt32(n)).ToArray();
+                Flight? flightInfo = _flightRepository.GetFlight(bookingDetails.FlightIdFK);
+                if (flightInfo != null)
+                {
+                    _ticketRepository.Book(new Ticket()
+                    {
+                        Row = seatInfo[0],
+                        Column = seatInfo[1],
+                        FlightIdFK = bookingDetails.FlightIdFK,
+                        Passport = bookingDetails.Passport,
+                        PricePaid = flightInfo.WholesalePrice * flightInfo.CommissionRate
+                    });
+                }
+                else
+                {
+                    throw new InvalidOperationException("Missing flight prices.");
+                }
 
-
+            }
         }
 
 
         public BookTicketViewModel BookingDetails(Guid FlightIdFk)
         {
-            var flightDetails = _flightRepository.GetFlight(FlightIdFk).SingleOrDefault();
-            var ticketDetails = _ticketRepository.GetTickets(FlightIdFk);
+            var flightDetails = _flightRepository.GetFlight(FlightIdFk);
+            var ticketDetails = _ticketRepository.GetTickets();
 
-            BookTicketViewModel myModel = new BookTicketViewModel();
-            myModel.Rows = flightDetails.Rows;
-            myModel.Columns = flightDetails.Columns;
-            myModel.OccupiedSeats = new List<(int, int)>();
-
-            foreach (var ticket in ticketDetails)
+            if (flightDetails != null && ticketDetails != null)
             {
-                myModel.OccupiedSeats.Add((ticket.Column, ticket.Row));
+                BookTicketViewModel myModel = new BookTicketViewModel();
+                myModel.Rows = flightDetails.Rows;
+                myModel.Columns = flightDetails.Columns;
+                myModel.OccupiedSeats = new List<(int, int)>();
+
+
+                foreach (var ticket in ticketDetails)
+                {
+                    myModel.OccupiedSeats.Add((ticket.Column, ticket.Row));
+                }
+                return myModel;
             }
-
-            return myModel;
+            else
+            {
+                throw new InvalidOperationException("Invalid flight or ticket details");
+            }
         }
-
-
     }
 }

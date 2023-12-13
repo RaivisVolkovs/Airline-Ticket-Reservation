@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Domain.Models
+﻿namespace Airline_Ticket_Reservation.Models.ViewModels
 {
-    public class Ticket
+    public class ListTicketViewModel
     {
-
-        [Key]
         public Guid Id { get; set; }
 
         public int Row { get; set; }
@@ -25,6 +15,5 @@ namespace Domain.Models
         public double PricePaid { get; set; }
 
         public bool Cancelled { get; set; }
-
     }
 }

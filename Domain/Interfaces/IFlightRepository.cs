@@ -11,6 +11,6 @@ namespace Domain.Interfaces
     {
         public IQueryable<Flight> GetFlights();
 
-        public IQueryable<Flight> GetFlight(Guid Id);
+        public Flight? GetFlight(Guid Id);
     }
 }

@@ -9,6 +9,8 @@
         public string? CountryTo { get; set; }
         public double WholesalePrice { get; set; }
 
+        public double RetailPrice { get; set; }
+
         public bool IsActive { get; set; }
     }
     

@@ -25,9 +25,9 @@ namespace DataAccess.Repositories
             return _airlineDbContext.Flights;
         }
 
-        public IQueryable<Flight> GetFlight(Guid Id)
+        public Flight? GetFlight(Guid Id)
         {
-            return _airlineDbContext.Flights.Where(flight => flight.Id == Id);
+            return _airlineDbContext.Flights.Where(flight => flight.Id == Id).SingleOrDefault();
         }
 
     }

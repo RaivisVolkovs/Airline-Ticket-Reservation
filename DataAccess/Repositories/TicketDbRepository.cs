@@ -51,14 +51,14 @@ namespace DataAccess.Repositories
         }
 
 
-        public IEnumerable<Ticket> GetTickets(Guid Id)
+        public IQueryable<Ticket> GetTickets()
         {
-            return _airlineDbContext.Tickets.Where(x => x.FlightIdFK == Id);
+            return _airlineDbContext.Tickets;
         }
 
-        public IEnumerable<Ticket> GetTicket(Guid Id)
+        public Ticket? GetTicket(Guid Id)
         {
-            return GetTickets(Id);
+            return _airlineDbContext.Tickets.SingleOrDefault(x => x.Id == Id);
         }
 
         public int GetActiveTicketsCount(Guid Id)

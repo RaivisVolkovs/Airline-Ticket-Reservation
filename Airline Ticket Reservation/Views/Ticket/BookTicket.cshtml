@@ -19,33 +19,17 @@
                         @for (int col = 1; col <= Model.Columns; col++)
                         {
                             var isSeatOccupied = Model.OccupiedSeats.Any(seat => seat.Item1 == col && seat.Item2 == row);
-
+                       
                             <td>
-                                @if (isSeatOccupied)
-                                {
-                                    <span style="color: red;">X</span>
-                                }
-                                else
-                                {
-                                    <span style="color: green;">O</span>
-                                }
-                            </td>
+                                <input type="checkbox" name="SelectedSeats" id="@(Convert.ToString(row) + '_' +Convert.ToString(col))" value="@(Convert.ToString(row) + ';' +Convert.ToString(col))" @(isSeatOccupied ? "checked disabled" : "") />
+                                <img src="/images/download.png" style="width:40px;height:40px">
+                            </td> 
                         }
                     </tr>
                 }
             </table>
-            <div class="form-group">
-                <label asp-for="Row" class="control-label"></label>
-                <input asp-for="Row" class="form-control" />
-                <span asp-validation-for="Row" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Column" class="control-label"></label>
-                <input asp-for="Column" class="form-control" />
-                <span asp-validation-for="Column" class="text-danger"></span>
-            </div>
 
-            <div class="form-group">
+            <div class="form-group" hidden>
                 <label asp-for="FlightIdFK" class="control-label"></label>
                 <input asp-for="FlightIdFK" class="form-control" />
                 <span asp-validation-for="FlightIdFK" class="text-danger"></span>
@@ -54,11 +38,6 @@
                 <label asp-for="Passport" class="control-label"></label>
                 <input asp-for="Passport" class="form-control" />
                 <span asp-validation-for="Passport" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PricePaid" class="control-label"></label>
-                <input asp-for="PricePaid" class="form-control" />
-                <span asp-validation-for="PricePaid" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="BookTicket" class="btn btn-primary" />

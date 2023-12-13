@@ -33,6 +33,7 @@ namespace Airline_Ticket_Reservation
             builder.Services.AddScoped<IFlightRepository, FlightDbRepository>();
             builder.Services.AddScoped<IFlightsService, FlightService>();
             builder.Services.AddScoped<ITicketService, TicketService>();
+            builder.Services.AddScoped<IAdminService, AdminService>();
             builder.Services.AddScoped(typeof(FlightDbRepository));
 
             var app = builder.Build();

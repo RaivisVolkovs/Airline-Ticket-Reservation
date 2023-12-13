@@ -22,6 +22,7 @@ namespace Airline_Ticket_Reservation.Services
         }
         public IEnumerable<ListFlightViewModel> GetCurrentAvailableFlights()
         {
+            
             IQueryable<Flight> list = _flightRepository.GetFlights().Where(x => x.DepartureDate > DateTime.Now);
 
             var output = from p in list
@@ -32,7 +33,7 @@ namespace Airline_Ticket_Reservation.Services
                              ArrivalDate = p.ArrivalDate,
                              CountryFrom = p.CountryFrom,
                              CountryTo = p.CountryTo,
-                             WholesalePrice = p.WholesalePrice,
+                             RetailPrice = p.WholesalePrice * p.CommissionRate,
                              IsActive = _ticketRepository.GetActiveTicketsCount(p.Id) < (p.Rows * p.Columns),
 
                          };

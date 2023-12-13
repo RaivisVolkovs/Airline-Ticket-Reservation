@@ -55,8 +55,6 @@ namespace Airline_Ticket_Reservation.Controllers
                 return RedirectToAction("Index", "Ticket");
             }
         }
-
-
     }
 }
 
