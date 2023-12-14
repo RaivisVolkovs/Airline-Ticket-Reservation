@@ -4,6 +4,7 @@ using DataAccess.Repositories;
 using Domain.Interfaces;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Web.Mvc;
 
 namespace Airline_Ticket_Reservation.Services
 {
@@ -22,7 +23,6 @@ namespace Airline_Ticket_Reservation.Services
 
 
         }
-
         public IEnumerable<ListTicketViewModel> ListTickets(Guid flightId)
         {
             try
@@ -36,6 +36,7 @@ namespace Airline_Ticket_Reservation.Services
                     Column = p.Column,
                     FlightIdFK = p.FlightIdFK,
                     Passport = p.Passport,
+                    PassportNo = p.PassportNo,
                     PricePaid = p.PricePaid,
                     Cancelled = p.Cancelled,
                 }).ToList();
@@ -65,6 +66,7 @@ namespace Airline_Ticket_Reservation.Services
                 Row = ticketDetails.Row,
                 Column = ticketDetails.Column,
                 FlightIdFK = ticketDetails.FlightIdFK,
+                PassportNo = ticketDetails.PassportNo,
                 Passport = ticketDetails.Passport,
                 PricePaid = ticketDetails.PricePaid,
                 Cancelled = ticketDetails.Cancelled,

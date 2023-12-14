@@ -12,7 +12,7 @@ namespace Airline_Ticket_Reservation
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +22,8 @@ namespace Airline_Ticket_Reservation
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            builder.Services.AddDefaultIdentity<CustomUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AirlineDbContext>();
             builder.Services.AddControllersWithViews();
 
@@ -31,6 +32,7 @@ namespace Airline_Ticket_Reservation
             // builder.Services.AddScoped<ITicketRepository,TicketDbRepository>(x => new TicketFileRepository(absolutePath));
             builder.Services.AddScoped<ITicketRepository, TicketDbRepository>();
             builder.Services.AddScoped<IFlightRepository, FlightDbRepository>();
+            builder.Services.AddScoped<IUserRepository, UserDbRepository>();
             builder.Services.AddScoped<IFlightsService, FlightService>();
             builder.Services.AddScoped<ITicketService, TicketService>();
             builder.Services.AddScoped<IAdminService, AdminService>();
@@ -62,6 +64,43 @@ namespace Airline_Ticket_Reservation
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
+
+            using(var scope = app.Services.CreateScope())
+            {
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var roles = new[] { "Admin", "Clients" };
+
+                foreach(var role in roles)
+                {
+                    if (!await roleManager.RoleExistsAsync(role))
+                        await roleManager.CreateAsync(new IdentityRole(role));
+                }
+            }
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<CustomUser>>();
+
+                string email = "admin@admin.com";
+                string password = "Test1234@";
+                string FirstName = "Test";
+                string LastName = "Test1";
+                string passportNo = "123456";
+
+                if(await userManager.FindByEmailAsync(email) == null)
+                {
+                    var user = new CustomUser();
+                    user.UserName = email;
+                    user.Email = email;
+                    user.FirstName = FirstName;
+                    user.LastName= LastName;
+                    user.PassportNo = passportNo;
+
+                    await userManager.CreateAsync(user, password);
+
+                    await userManager.AddToRoleAsync(user, "Admin");
+                }
+            }
 
             app.Run();
         }

@@ -20,6 +20,8 @@ namespace Domain.Models
 
         public Guid FlightIdFK { get; set; }
 
+        public string? PassportNo { get; set; }
+
         public string? Passport { get; set; }
 
         public double PricePaid { get; set; }

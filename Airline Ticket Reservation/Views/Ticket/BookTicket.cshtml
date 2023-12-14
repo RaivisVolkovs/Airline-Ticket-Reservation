@@ -34,9 +34,15 @@
                 <input asp-for="FlightIdFK" class="form-control" />
                 <span asp-validation-for="FlightIdFK" class="text-danger"></span>
             </div>
+            
             <div class="form-group">
                 <label class="control-label">Upload Passport Image</label>
                 <input name="Passport" class="form-control" type="file" />
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Passport Number</label>
+                <input value="@Model.PassportNo" name="PassportNo" class="form-control" />
             </div>
             <div class="form-group">
                 <input type="submit" value="BookTicket" class="btn btn-primary" />

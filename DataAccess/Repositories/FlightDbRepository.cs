@@ -22,6 +22,7 @@ namespace DataAccess.Repositories
 
         public IQueryable<Flight> GetFlights()
         {
+           
             return _airlineDbContext.Flights;
         }
 

@@ -3,10 +3,12 @@ using Airline_Ticket_Reservation.Models.ViewModels;
 using Airline_Ticket_Reservation.Services;
 using Domain.Interfaces;
 using Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Airline_Ticket_Reservation.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private IFlightsService _flightRepository;
@@ -20,17 +22,22 @@ namespace Airline_Ticket_Reservation.Controllers
             _adminService = adminService;
         }
 
+        
         public IActionResult Index()
         {
             return View();
         }
 
+
+       
         public IActionResult ListFlights()
         {
             var flights = _flightRepository.GetCurrentAvailableFlights();
             return View(flights);
         }
 
+
+        
         public IActionResult ListTickets(Guid id)
         {
             try
@@ -48,6 +55,7 @@ namespace Airline_Ticket_Reservation.Controllers
 
 
         [Route("Admin/ViewTicket/{ticketId}")]
+      
         public IActionResult ViewTicket(Guid ticketId)
         {
             try

@@ -5,6 +5,7 @@ using DataAccess.Repositories;
 using Domain.Interfaces;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Airline_Ticket_Reservation.Controllers
 {
@@ -39,15 +40,17 @@ namespace Airline_Ticket_Reservation.Controllers
         public IActionResult BookTicket(Guid FlightIdFk)
         {
             return View(_ticketService.BookingDetails(FlightIdFk));
+            
         }
 
         [HttpPost]
-        [HttpGet]
         public IActionResult BookTicket(BookTicketViewModel bookTicketViewModel, [FromServices] IWebHostEnvironment host)
         {
             try
             {
+                
                 _ticketService.BookTicket(bookTicketViewModel, host);
+                TempData["message"] = "Ticket added";
                 return RedirectToAction("Index", "Ticket");
             }
             catch (Exception ex)
@@ -56,6 +59,7 @@ namespace Airline_Ticket_Reservation.Controllers
                 return RedirectToAction("Index", "Ticket");
             }
         }
+
     }
 }
 
