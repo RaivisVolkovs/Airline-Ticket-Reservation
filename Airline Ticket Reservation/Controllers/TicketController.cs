@@ -6,6 +6,7 @@ using Domain.Interfaces;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Hosting;
 
 namespace Airline_Ticket_Reservation.Controllers
 {
@@ -28,9 +29,9 @@ namespace Airline_Ticket_Reservation.Controllers
 
                 return View(_flightsService.GetCurrentAvailableFlights());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                TempData["error"] = ex.Message;
+                TempData["error"] = "Wasn't able to List the flights";
                 return RedirectToAction("Index", "Home");
             }
         }
@@ -40,7 +41,7 @@ namespace Airline_Ticket_Reservation.Controllers
         public IActionResult BookTicket(Guid FlightIdFk)
         {
             return View(_ticketService.BookingDetails(FlightIdFk));
-            
+
         }
 
         [HttpPost]
@@ -48,18 +49,54 @@ namespace Airline_Ticket_Reservation.Controllers
         {
             try
             {
-                
+
                 _ticketService.BookTicket(bookTicketViewModel, host);
                 TempData["message"] = "Ticket added";
                 return RedirectToAction("Index", "Ticket");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                TempData["error"] = ex.Message;
+                TempData["error"] = "The ticket was not added";
                 return RedirectToAction("Index", "Ticket");
             }
         }
 
+
+        [HttpGet]
+        [Route("Ticket/GetTicketHistory/{userId}")]
+        public IActionResult GetTicketHistory(string userId)
+        {
+            
+            try
+            {
+                var ticketHistory = _ticketService.GetTicketHistory(userId);
+                return View(ticketHistory);
+            }
+            catch (Exception)
+            {
+                TempData["error"] = "Cant't access the Tickey History page";
+                return RedirectToAction("Index", "Ticket");
+            }
+        }
+
+        [Route("/TicketHistoryDetails/{ticketId}")]
+
+        public IActionResult TicketHistoryDetails(Guid ticketId)
+        {
+            try
+            {
+
+                var viewTicket = _ticketService.TicketHistoryDetails(ticketId);
+                return View(viewTicket);
+            }
+
+            catch (Exception ex)
+            {
+                TempData["error"] = "Couldn't view a ticket";
+                return RedirectToAction("Index", "Home");
+            }
+
+        }
     }
 }
 

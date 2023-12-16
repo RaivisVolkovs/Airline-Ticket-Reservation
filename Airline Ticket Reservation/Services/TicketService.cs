@@ -7,6 +7,7 @@ using Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Web.Mvc;
 
 namespace Airline_Ticket_Reservation.Services
 {
@@ -21,7 +22,7 @@ namespace Airline_Ticket_Reservation.Services
         {
             _ticketRepository = ticketRepository;
             _flightRepository = flightRepository;
-             _currentUser = httpContextAccessor.HttpContext?.User; //dabon lietotaju
+            _currentUser = httpContextAccessor.HttpContext?.User; //dabon lietotaju
             _userDbRepository = userDbRepository;
         }
 
@@ -32,7 +33,7 @@ namespace Airline_Ticket_Reservation.Services
             {
                 string relativePath = "";
 
-                if(bookingDetails.Passport != null)
+                if (bookingDetails.Passport != null)
                 {
                     string newFileName = Guid.NewGuid().ToString() + Path.GetExtension(bookingDetails.Passport.FileName);
 
@@ -46,8 +47,8 @@ namespace Airline_Ticket_Reservation.Services
                         fs.Flush();
                     }
                 }
-              
-                    var flightDetails = _flightRepository.GetFlight(bookingDetails.FlightIdFK);
+
+                var flightDetails = _flightRepository.GetFlight(bookingDetails.FlightIdFK);
                 if (flightDetails == null || flightDetails.DepartureDate <= DateTime.Now)
                 {
                     throw new InvalidOperationException("Invalid flight or the departure date is not in the future.");
@@ -66,7 +67,7 @@ namespace Airline_Ticket_Reservation.Services
                             FlightIdFK = bookingDetails.FlightIdFK,
                             Passport = relativePath,
                             PricePaid = flightInfo.WholesalePrice * flightInfo.CommissionRate,
-                            PassportNo=bookingDetails.PassportNo
+                            PassportNo = bookingDetails.PassportNo
                         });
 
                     }
@@ -88,7 +89,7 @@ namespace Airline_Ticket_Reservation.Services
 
 
             var flightDetails = _flightRepository.GetFlight(FlightIdFk);
-            var ticketDetails = _ticketRepository.GetTickets();
+            var ticketDetails = _ticketRepository.GetTickets().Where(t => t.FlightIdFK == FlightIdFk);
 
             if (flightDetails != null && ticketDetails != null)
             {
@@ -97,17 +98,21 @@ namespace Airline_Ticket_Reservation.Services
                 myModel.Columns = flightDetails.Columns;
                 myModel.OccupiedSeats = new List<(int, int)>();
 
-                if(_currentUser.Identity.IsAuthenticated)
+                if (_currentUser.Identity.IsAuthenticated)
                 {
                     string userId = _currentUser.FindFirstValue(ClaimTypes.NameIdentifier);
-                    var currentCustomUser = _userDbRepository.GetCurrentCustomUser(userId);  
+                    var currentCustomUser = _userDbRepository.GetCurrentCustomUser(userId);
 
                     myModel.PassportNo = currentCustomUser.PassportNo;
                 }
 
                 foreach (var ticket in ticketDetails)
                 {
-                    myModel.OccupiedSeats.Add((ticket.Column, ticket.Row));
+                    if(ticket.Cancelled != true)
+                    {
+                        myModel.OccupiedSeats.Add((ticket.Column, ticket.Row));
+                    }
+                    
                 }
                 return myModel;
             }
@@ -117,35 +122,67 @@ namespace Airline_Ticket_Reservation.Services
             }
         }
 
+        public IEnumerable<ListTicketViewModel> GetTicketHistory(string userId)
+        {
+            try
+            {
+                var user = _userDbRepository.GetCurrentCustomUser(_currentUser.FindFirstValue(ClaimTypes.NameIdentifier));
+
+                if (user != null)
+                {
+                    IQueryable<Ticket> list = _ticketRepository.GetTickets().Where(x => x.PassportNo == user.PassportNo).OrderBy(x => x.Id); 
+
+                    var output = list.Select(p => new ListTicketViewModel()
+                    {
+                        Id = p.Id,
+                        Row = p.Row,
+                        Column = p.Column,
+                        FlightIdFK = p.FlightIdFK,
+                        Passport = p.Passport,
+                        PassportNo = p.PassportNo,
+                        PricePaid = p.PricePaid,
+                        Cancelled = p.Cancelled,
+                    }).ToList();
+
+                    return output;
+                }else
+                {
+                    throw new InvalidOperationException("Invalid flight or ticket details");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error in TicketHistory service: {ex.Message}", ex);
+            }
 
 
 
+        }
+        public ListTicketViewModel TicketHistoryDetails(Guid flightId)
+        {
 
+            var ticketDetails = _ticketRepository.GetTicket(flightId);
 
+            if (ticketDetails == null)
+            {
+                return null;
+            }
 
+            var output = new ListTicketViewModel()
+            {
+                Id = ticketDetails.Id,
+                Row = ticketDetails.Row,
+                Column = ticketDetails.Column,
+                FlightIdFK = ticketDetails.FlightIdFK,
+                PassportNo = ticketDetails.PassportNo,
+                Passport = ticketDetails.Passport,
+                PricePaid = ticketDetails.PricePaid,
+                Cancelled = ticketDetails.Cancelled,
+            };
 
-        //public List<ListTicketViewModel> TicketHistory(string passportNo)
-        //{
-        //    var user = _userManager.FindByPassportNoAsync(passportNo).Result;
+            return output;
 
-        //    if (user != null)
-        //    {
-        //        var userTickets = _ticketRepository.GetTickets(user.Id);
-
-        //        var ticketViewModels = userTickets.Select(ticket => new ListTicketViewModel
-        //        {
-        //            FlightIdFK = ticket.FlightIdFK,
-        //            Row = ticket.Row,
-        //            Column = ticket.Column,
-        //            PricePaid = ticket.PricePaid
-        //        }).ToList();
-
-        //        return ticketViewModels;
-        //    }
-
-        //    return null; 
-        //}
+        }
     }
-
 }
 

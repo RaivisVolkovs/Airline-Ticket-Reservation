@@ -21,9 +21,5 @@ namespace Domain.Interfaces
         public int GetActiveTicketsCount(Guid Id);
 
         public bool IsSeatBooked(Guid flightId, int row, int column);
-
-
-
-
     }
 }

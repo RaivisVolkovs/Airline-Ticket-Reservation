@@ -68,9 +68,11 @@ namespace DataAccess.Repositories
 
         public bool IsSeatBooked(Guid flightId, int row, int column)
         {
-            var ticketsForSeat = _airlineDbContext.Tickets.Where(ticket => ticket.FlightIdFK == flightId && ticket.Row == row && ticket.Column == column && !ticket.Cancelled).ToList();
-
-            return ticketsForSeat.Any();
+            return _airlineDbContext.Tickets.Any(ticket =>
+                ticket.FlightIdFK == flightId &&
+                ticket.Row == row &&
+                ticket.Column == column &&
+                !ticket.Cancelled);
         }
     }
 }

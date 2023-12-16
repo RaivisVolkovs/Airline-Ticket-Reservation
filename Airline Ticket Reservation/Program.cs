@@ -29,8 +29,8 @@ namespace Airline_Ticket_Reservation
 
 
             string absolutePath = builder.Environment.ContentRootPath + "Data\\ticket.json";
-            // builder.Services.AddScoped<ITicketRepository,TicketDbRepository>(x => new TicketFileRepository(absolutePath));
-            builder.Services.AddScoped<ITicketRepository, TicketDbRepository>();
+            builder.Services.AddScoped<ITicketRepository, TicketFileRepository>(x => new TicketFileRepository(absolutePath));
+            //builder.Services.AddScoped<ITicketRepository, TicketDbRepository>();
             builder.Services.AddScoped<IFlightRepository, FlightDbRepository>();
             builder.Services.AddScoped<IUserRepository, UserDbRepository>();
             builder.Services.AddScoped<IFlightsService, FlightService>();

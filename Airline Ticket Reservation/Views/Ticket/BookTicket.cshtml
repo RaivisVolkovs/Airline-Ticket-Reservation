@@ -19,22 +19,23 @@
                         @for (int col = 1; col <= Model.Columns; col++)
                         {
                             var isSeatOccupied = Model.OccupiedSeats.Any(seat => seat.Item1 == col && seat.Item2 == row);
-                       
+
                             <td>
                                 <input type="checkbox" name="SelectedSeats" id="@(Convert.ToString(row) + '_' +Convert.ToString(col))" value="@(Convert.ToString(row) + ';' +Convert.ToString(col))" @(isSeatOccupied ? "checked disabled" : "") />
                                 <img src="/images/download.png" style="width:40px;height:40px">
-                            </td> 
+                            </td>
                         }
                     </tr>
                 }
             </table>
+
 
             <div class="form-group" hidden>
                 <label asp-for="FlightIdFK" class="control-label"></label>
                 <input asp-for="FlightIdFK" class="form-control" />
                 <span asp-validation-for="FlightIdFK" class="text-danger"></span>
             </div>
-            
+
             <div class="form-group">
                 <label class="control-label">Upload Passport Image</label>
                 <input name="Passport" class="form-control" type="file" />
@@ -44,19 +45,36 @@
                 <label class="control-label">Passport Number</label>
                 <input value="@Model.PassportNo" name="PassportNo" class="form-control" />
             </div>
+
             <div class="form-group">
                 <input type="submit" value="BookTicket" class="btn btn-primary" />
             </div>
         </form>
+
     </div>
 </div>
+@if (!User.Identity.IsAuthenticated)
+{
+    <div class="registration-backdrop" id="registration">
+        <div class="registration-box">
+            <a href="/Identity/Account/Login">Login</a>
+            <button onclick="hideRegistration()">Continue without login</button>
+        </div>
+    </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <script>
+        document.body.classList.add('background-disabled');
 
+        function hideRegistration() {
+            document.getElementById("registration").style.display = "none";
+            document.body.classList.remove('background-disabled');
+        }
+    </script>
+}
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+
     }
 }

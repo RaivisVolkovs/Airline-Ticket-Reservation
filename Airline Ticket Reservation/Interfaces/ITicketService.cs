@@ -9,5 +9,9 @@ namespace Airline_Ticket_Reservation.Interfaces
         public void BookTicket(BookTicketViewModel bookingDetails, IWebHostEnvironment hostEnvironment);
         public BookTicketViewModel BookingDetails(Guid FlightIdFk);
 
+        public IEnumerable<ListTicketViewModel> GetTicketHistory(string userId);
+
+        public ListTicketViewModel TicketHistoryDetails(Guid flightId);
+
     }
 }

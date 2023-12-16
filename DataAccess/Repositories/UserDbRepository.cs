@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
-    public class UserDbRepository: IUserRepository
+    public class UserDbRepository : IUserRepository
     {
         private ITicketRepository _ticketRepository;
         private AirlineDbContext _airlineDbContext;
 
-        public UserDbRepository(ITicketRepository ticketRepository, AirlineDbContext airlineDbContext) 
+        public UserDbRepository(ITicketRepository ticketRepository, AirlineDbContext airlineDbContext)
         {
             _ticketRepository = ticketRepository;
             _airlineDbContext = airlineDbContext;
@@ -28,7 +28,9 @@ namespace DataAccess.Repositories
 
         public IQueryable<Ticket> GetTicketHistory(string userId)
         {
-            throw new NotImplementedException();
+
+            return _airlineDbContext.Tickets.Where(x=> x.PassportNo == userId);
         }
+
     }
 }

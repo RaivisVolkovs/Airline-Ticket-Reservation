@@ -47,7 +47,7 @@ namespace Airline_Ticket_Reservation.Controllers
             }
             catch (Exception ex)
             {
-                TempData["error"] = ex.Message;
+                TempData["error"] = "Tickets were not listed";
                 return RedirectToAction("Index", "Home");
             }
         }
@@ -67,7 +67,7 @@ namespace Airline_Ticket_Reservation.Controllers
 
             catch (Exception ex)
             {
-                TempData["error"] = ex.Message;
+                TempData["error"] = "Couldn't view a ticket";
                 return RedirectToAction("Index", "Home");
             }
 
