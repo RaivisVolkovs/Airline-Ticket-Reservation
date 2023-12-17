@@ -4,7 +4,7 @@
     ViewData["Title"] = "GetTicketHistory";
 }
 
-<h1>GetTicketHistory</h1>
+<h1>Ticket History</h1>
 
 
 <table class="table">
@@ -21,9 +21,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FlightIdFK)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Passport)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PassportNo)
@@ -51,9 +48,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FlightIdFK)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Passport)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PassportNo)
