@@ -7,8 +7,6 @@ namespace Airline_Ticket_Reservation.Models.ViewModels
     public class BookTicketViewModel
     {
 
-
-
         public List<Ticket> tickets { get; set; }
 
         [Required(ErrorMessage = "Seating was not selected!")]
@@ -32,6 +30,7 @@ namespace Airline_Ticket_Reservation.Models.ViewModels
 
         public List<(int, int)> OccupiedSeats { get; set; }
 
+        [Required, MinLength(10)]
         public string[] SelectedSeats { get; set; }
 
 

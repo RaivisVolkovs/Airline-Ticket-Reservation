@@ -40,6 +40,7 @@ namespace Airline_Ticket_Reservation.Controllers
         [Route("Ticket/BookTicket/{FlightIdFk}")]
         public IActionResult BookTicket(Guid FlightIdFk)
         {
+
             return View(_ticketService.BookingDetails(FlightIdFk));
 
         }
@@ -49,7 +50,6 @@ namespace Airline_Ticket_Reservation.Controllers
         {
             try
             {
-
                 _ticketService.BookTicket(bookTicketViewModel, host);
                 TempData["message"] = "Ticket added";
                 return RedirectToAction("Index", "Ticket");
@@ -96,6 +96,13 @@ namespace Airline_Ticket_Reservation.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
+        }
+
+        [HttpPost]
+        public IActionResult ToggleCancel(Guid Id)
+        {
+            _ticketService.ToggleCancel(Id);
+            return RedirectToAction("TicketHistoryDetails", "Ticket", new { ticketId = Id });
         }
     }
 }

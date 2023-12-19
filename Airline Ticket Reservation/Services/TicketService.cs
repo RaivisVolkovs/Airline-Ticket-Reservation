@@ -51,9 +51,12 @@ namespace Airline_Ticket_Reservation.Services
                 var flightDetails = _flightRepository.GetFlight(bookingDetails.FlightIdFK);
                 if (flightDetails == null || flightDetails.DepartureDate <= DateTime.Now)
                 {
-                    throw new InvalidOperationException("Invalid flight or the departure date is not in the future.");
+                    
                 }
 
+                if(bookingDetails.SelectedSeats == null) { 
+                    throw new InvalidOperationException("No seat were added");
+                }
                 foreach (string seat in bookingDetails.SelectedSeats)
                 {
                     int[] seatInfo = seat.Split(';').Select(n => Convert.ToInt32(n)).ToArray();
@@ -182,6 +185,11 @@ namespace Airline_Ticket_Reservation.Services
 
             return output;
 
+        }
+
+        public void ToggleCancel(Guid Id)
+        {
+            _ticketRepository.Cancel(Id);
         }
     }
 }

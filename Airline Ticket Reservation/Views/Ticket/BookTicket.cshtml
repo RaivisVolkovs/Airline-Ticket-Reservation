@@ -10,22 +10,27 @@
     <div class="col-md-4">
         <form asp-action="BookTicket" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <table>
-                @for (int row = 1; row <= Model.Rows; row++)
-                {
-                    <tr>
-                        @for (int col = 1; col <= Model.Columns; col++)
-                        {
-                            var isSeatOccupied = Model.OccupiedSeats.Any(seat => seat.Item1 == col && seat.Item2 == row);
-
-                            <td>
-                                <input type="checkbox" name="SelectedSeats" id="@(Convert.ToString(row) + '_' +Convert.ToString(col))" value="@(Convert.ToString(row) + ';' +Convert.ToString(col))" @(isSeatOccupied ? "checked disabled" : "") />
-                                <img src="/images/download.png" style="width:40px;height:40px">
-                            </td>
-                        }
-                    </tr>
-                }
-            </table>
+            <div class="form-group">   
+                <table>
+                    @for (int row = 1; row <= Model.Rows; row++)
+                    {
+                        <tr>
+                            @for (int col = 1; col <= Model.Columns; col++)
+                            {
+                                var isSeatOccupied = Model.OccupiedSeats.Any(seat => seat.Item1 == col && seat.Item2 == row);
+                                
+                                <td>
+                                    
+                                    <input type="checkbox" name="SelectedSeats" id="@(Convert.ToString(row) + '_' +Convert.ToString(col))" value="@(Convert.ToString(row) + ';' +Convert.ToString(col))" @(isSeatOccupied ? "checked disabled" : "")/>
+                                    <img src="/images/download.png" style="width:40px;height:40px">    
+                                </td>
+                            }
+                        </tr>
+                    }
+                </table>
+                <span id="seatValidationError" class="text-danger" style="display:none;">Please select at least one seat.</span>
+            </div>
+            
 
 
             <div class="form-group" hidden>
@@ -35,14 +40,17 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label">Upload Passport Image</label>
-                <input name="Passport" class="form-control" type="file" />
+                <label asp-for="Passport" class="control-label"></label>
+                <input asp-for="Passport" class="form-control" type="file" />
+                <span asp-validation-for="Passport" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label class="control-label">Passport Number</label>
-                <input value="@Model.PassportNo" name="PassportNo" class="form-control" />
+                <label asp-for="PassportNo" class="control-label"></label>
+                <input asp-for="PassportNo" class="form-control" />
+                <span asp-validation-for="PassportNo" class="text-danger"></span>
             </div>
+            
 
             <div class="form-group">
                 <input type="submit" value="BookTicket" class="btn btn-primary" />
@@ -69,6 +77,25 @@
         }
     </script>
 }
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var form = document.querySelector('form');
+        var seatValidationError = document.getElementById('seatValidationError');
+        form.addEventListener('submit', function (event) {
+            var availableSeats = document.querySelectorAll('input[name="SelectedSeats"]:not(:disabled)');
+            var selectedSeats = Array.from(availableSeats).filter(function (seat) {
+                return seat.checked;
+            });
+
+            if (selectedSeats.length === 0) {
+                seatValidationError.style.display = 'block';
+                event.preventDefault(); // Prevent form submission
+            } else {
+                seatValidationError.style.display = 'none';
+            }
+        });
+    });
+</script>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

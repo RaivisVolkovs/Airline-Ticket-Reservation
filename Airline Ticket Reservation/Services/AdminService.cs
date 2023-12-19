@@ -11,12 +11,12 @@ namespace Airline_Ticket_Reservation.Services
     public class AdminService : IAdminService
     {
 
-        private FlightDbRepository _flightRepository;
+        private IFlightRepository _flightRepository;
         private ITicketRepository _ticketRepository;
 
 
 
-        public AdminService(FlightDbRepository flightRepository, ITicketRepository ticketRepository)
+        public AdminService(IFlightRepository flightRepository, ITicketRepository ticketRepository)
         {
             _flightRepository = flightRepository;
             _ticketRepository = ticketRepository;

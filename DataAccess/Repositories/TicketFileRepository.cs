@@ -29,10 +29,15 @@ namespace DataAccess.Repositories
 
         public void Book(Ticket ticket)
         {
+            if (IsSeatBooked(ticket.FlightIdFK, ticket.Row, ticket.Column) == true)
+            {
+                throw new InvalidOperationException("Seat is already booked");
+            }
             ticket.Id = Guid.NewGuid();
 
             var tickets = GetTickets().ToList();
             tickets.Add(ticket);
+
 
             string jsonString = JsonSerializer.Serialize(tickets);
 
@@ -42,18 +47,15 @@ namespace DataAccess.Repositories
         public void Cancel(Guid id)
         {
             var tickets = GetTickets().ToList();
-
             int index = tickets.FindIndex(t => t.Id == id);
 
             if (index != -1)
             {
-                tickets.RemoveAt(index);
+                tickets[index].Cancelled = !tickets[index].Cancelled;
 
                 string jsonString = JsonSerializer.Serialize(tickets);
                 System.IO.File.WriteAllText(filePath, jsonString);
             }
-
-
         }
 
 

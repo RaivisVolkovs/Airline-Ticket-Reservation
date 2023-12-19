@@ -51,12 +51,18 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.PricePaid)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Cancelled)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Cancelled)
+        <dd class="col-sm-10">
+            <form asp-action="ToggleCancel" method="post">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="checkbox" checked="@Model.Cancelled" onChange="this.form.submit()" />
+            </form>
         </dd>
+        <div>
+            
+        </div>
     </dl>
 </div>
 <div>

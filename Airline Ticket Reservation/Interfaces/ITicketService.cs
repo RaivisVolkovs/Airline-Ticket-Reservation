@@ -13,5 +13,6 @@ namespace Airline_Ticket_Reservation.Interfaces
 
         public ListTicketViewModel TicketHistoryDetails(Guid flightId);
 
+        public void ToggleCancel(Guid Id);
     }
 }

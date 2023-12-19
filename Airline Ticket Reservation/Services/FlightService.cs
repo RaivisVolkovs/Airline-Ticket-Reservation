@@ -10,11 +10,11 @@ namespace Airline_Ticket_Reservation.Services
 {
     public class FlightService : IFlightsService
     {
-        private FlightDbRepository _flightRepository;
+        private IFlightRepository _flightRepository;
         private ITicketRepository _ticketRepository;
 
 
-        public FlightService(FlightDbRepository flightRepository, ITicketRepository ticketRepository)
+        public FlightService(IFlightRepository flightRepository, ITicketRepository ticketRepository)
         {
             _flightRepository = flightRepository;
             _ticketRepository = ticketRepository;
